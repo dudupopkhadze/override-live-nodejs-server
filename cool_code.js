@@ -5,8 +5,12 @@ const overRideListeners = (emitter) => {
   listeners.forEach((list) => {
     const holder = { list };
     Shimmer.wrap(holder, "list", (original) => {
-      return function (req, _) {
-        if (req.method === "PATCH") return;
+      return function (req, res) {
+        if (req.method === "PATCH") {
+          res.writeHead(405);
+          res.end();
+          return;
+        }
         return original.apply(this, arguments);
       };
     });
